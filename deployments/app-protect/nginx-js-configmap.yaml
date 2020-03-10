@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: juiceshop-config
+  namespace: nginx-ingress
+data:
+  juiceshop.conf: |
+    server {
+         
+         app_protect_enable on;
+         app_protect_policy_file "/etc/nginx/waf/waf-policy.json";
+         app_protect_security_log_enable on;
+         app_protect_security_log "/etc/nginx/log-default.json" syslog:server=10.1.1.5:514;
+     }

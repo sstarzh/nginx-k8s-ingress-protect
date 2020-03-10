@@ -23,6 +23,10 @@ server {
 	{{if not $server.GRPCOnly}}
 	{{range $port := $server.Ports}}
 	listen {{$port}}{{if $server.ProxyProtocol}} proxy_protocol{{end}};
+	app_protect_enable on;
+	app_protect_security_log_enable on;
+	app_protect_security_log "/etc/nginx/log-default.json" syslog:server=127.0.0.1:514;
+	app_protect_policy_file "/etc/nginx/waf/waf-policy.json"
 	{{- end}}
 	{{end}}
 	{{if $server.SSL}}

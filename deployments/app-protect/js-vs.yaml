@@ -1,0 +1,15 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: juiceshop-vs
+  namespace: staging
+spec:
+  host: localhost
+  upstreams:
+  - name: juiceshop
+    service: juiceshop
+    port: 8081
+  routes:
+  - path: /
+    action:
+      pass: juiceshop

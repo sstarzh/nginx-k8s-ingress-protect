@@ -48,13 +48,13 @@ match {{ $m.Name }} {
 
 {{ $s := .Server }}
 server {
-    listen 80{{ if $s.ProxyProtocol }} proxy_protocol{{ end }};
+    listen 8080{{ if $s.ProxyProtocol }} proxy_protocol{{ end }};
 
     server_name {{ $s.ServerName }};
     status_zone {{ $s.StatusZone }};
 
     {{ with $ssl := $s.SSL }}
-    listen 443 ssl{{ if $ssl.HTTP2 }} http2{{ end }}{{ if $s.ProxyProtocol }} proxy_protocol{{ end }};
+    listen 8443 ssl{{ if $ssl.HTTP2 }} http2{{ end }}{{ if $s.ProxyProtocol }} proxy_protocol{{ end }};
 
     ssl_certificate {{ $ssl.Certificate }};
     ssl_certificate_key {{ $ssl.CertificateKey }};

@@ -1,0 +1,231 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nginx-ingress
+  labels:
+    app.kubernetes.io/name: nginx-app-protect
+    app.kubernetes.io/part-of: nginx-app-protect
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: default-server-secret
+  namespace: nginx-ingress
+type: Opaque
+data:
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURBakNDQWVxZ0F3SUJBZ0lKQUtlektlcW9XR1N5TUEwR0NTcUdTSWIzRFFFQkN3VUFNQll4RkRBU0JnTlYKQkFNTUMyWnZieTVpWVhJdVkyOXRNQjRYRFRJd01ERXdPREl6TkRFd01Wb1hEVE13TURFd05USXpOREV3TVZvdwpGakVVTUJJR0ExVUVBd3dMWm05dkxtSmhjaTVqYjIwd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3CmdnRUtBb0lCQVFEVW1zNnV3VEkxRW5odERHTjVNRUthRThxTU1wckV3b0ZHZGRrc1FDTytVa09mQ2dKUHVPNjUKM1FJVEEvbFFuYloyMlJrSmdIemFzQkdyMk93TEJDNm1SSnp5MDVmQTZRbDVHbFo1NVhVZ1VwZzA1SWc1UXBqOQpxd1dWWXNCRk85eFZEU1UxWVlvb2puMlQ2YmltL01hR0lzT0NqblJERGZTL1ZldTJKR2w2NjgzK1Q2cjdkT2s1CjNVVER3WXFMQmJuWGxKTEJEV29FbzlBL2tKWVhDK1cwK2NhbENNQlljOEE3QjA5ZmQzd0RaVHM0Y0g0bTFRdEgKRUJJQTJmamNINkFtcFpKbm8vdnlmWXZEVlA4V3Q2UTlHelF5bTF1V1FpS2V2K2hNS0tHZVFHTW1LVWRJMXVJTAppSVRVL1ovZm4yVHVUbkU3OVdROU95WmkzTHloRVg4NUFnTUJBQUdqVXpCUk1CMEdBMVVkRGdRV0JCU05OY1U5CjR2RWwzK1R2V2YvS3NUNW1mSVVONVRBZkJnTlZIU01FR0RBV2dCU05OY1U5NHZFbDMrVHZXZi9Lc1Q1bWZJVU4KNVRBUEJnTlZIUk1CQWY4RUJUQURBUUgvTUEwR0NTcUdTSWIzRFFFQkN3VUFBNElCQVFCQ1UxcjRMc1JtaTd0aAovWHRNMzBzanZOSDhmbDkzNTRNZVB3UVZGVXloRUk4N1JYMGkybEdGYnJMZXdoVWtGUzM4R2phZUdvaUtVd285Clk1a0lJcTBKQU82ZCs5SWFVbk83OUpyQTBjVDc1QUxPQi96THpXaFVmRm81aXRldE1ZTFo5T0diUm1RVG5uUEgKWXZwWVllRjdac2V2OFlZQmlRRGlrQndaT001cllxTTZzVk9DalNUZFMvbEtaM0RXbXdWSWVUaC8veExuSDIvRQpsbHBKRlEvTkxvSGJHZnFCK1RjVEZ4MzYwNURxWWgrRm5kNC9NRVBTNFR3WE5jR1hueW4xcUwyVHZvUFBGL0V6CmNmV2VEbFpwOS9oTU1PZnhnUTYvQWlFc1p6dnhTNDRxZTNsZSs3VWx6d3hBT3NwbmttWjloSVJTck1zUDAwZWoKcGNhVnBHYUcKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+  tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2d0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktrd2dnU2xBZ0VBQW9JQkFRRFVtczZ1d1RJMUVuaHQKREdONU1FS2FFOHFNTXByRXdvRkdkZGtzUUNPK1VrT2ZDZ0pQdU82NTNRSVRBL2xRbmJaMjJSa0pnSHphc0JHcgoyT3dMQkM2bVJKenkwNWZBNlFsNUdsWjU1WFVnVXBnMDVJZzVRcGo5cXdXVllzQkZPOXhWRFNVMVlZb29qbjJUCjZiaW0vTWFHSXNPQ2puUkREZlMvVmV1MkpHbDY2ODMrVDZyN2RPazUzVVREd1lxTEJiblhsSkxCRFdvRW85QS8Ka0pZWEMrVzArY2FsQ01CWWM4QTdCMDlmZDN3RFpUczRjSDRtMVF0SEVCSUEyZmpjSDZBbXBaSm5vL3Z5Zll2RApWUDhXdDZROUd6UXltMXVXUWlLZXYraE1LS0dlUUdNbUtVZEkxdUlMaUlUVS9aL2ZuMlR1VG5FNzlXUTlPeVppCjNMeWhFWDg1QWdNQkFBRUNnZ0VCQUpKK2tVZnRLNUZTUnRTdElxWFEwVE9seTMxTEtVWEcySmthZnloMGtheUUKdHIrUmdBSTY1WlFBYTN0NjA0SHZDbGxlUWxnL3hzaFJaZnZKbnV3QVY3eU5ycS9MaU5lT084N01qU1cxTEQyMwphOVdXV3g5SmVtM2dPQnExVHRMbDZtNVlmbmtIMnRFVFRnaHJsYWJLcW1pbTc1eTRWL2dVVjc2M2o1R1VDWEorClk0Z1NjVSsvN0VCelhZQks5bVNIck84NnFPZWw2WUxxUnkvaUh6QU42S0FTeGxVd0VkWEE3QWdNaTc0VG5jYWEKWWMzWUZJT2d5cmhxZE14MWM1ZllPNTNmajlkaWlCdVFkNVoyUUNTMmpYclExc1VRRkU5clI0T0N1VnFjK3hCNgp2eHVxdjFmWHEycS81TEZIS05Ob0h1VTlrM0JGaUJnM3ZZSVhxb3NrWTJFQ2dZRUE3UTRYYUlUc2l4UGNDU2lDCno0RmpzbFNmT0drWmVNdkFMSHF1TzFNZDIvcENDRkxTbzluSkdodG1EMkZnSDlVMWpkNFMrWFNtWW96dmdVVWIKRXRzVVRRdThTZXFxcDY3Z3lBdUgxZy93Y01QeTErQnQ1OFhhSFI2ZkdEUkRuVHY5VW9MeXNPTjlZM1U5TlNxKwpOejNzTGtjWE9pZDZDVXJTVDd5OFNwS2p0eFVDZ1lFQTVaaDhtTmlOdzc3eDRhb012N3dEUnpRQXlzcXpLWEZKCkZIZXpBRW1RYzFlM3p5V2JBM0Jha2UrOEt1Q3lEbURHZmhWdVhWSW5Va3AyMXlYNFB1QUVpVWIvZVNKUVBORVAKeFRXVjg4Y2xQNWplUHlZaTFSQU1ka3duVU9LVTRkY1JHZFNPa0h4SDBxSVJJTDNyZnU0aW9VZHc4Ym44NzFFbQppUndJOHh5a01KVUNnWUVBako5b1dYTkkwdlB6K21iU3VuKzZBWWJiY040LzR2MlRRWStCSGVZZmQyZ01sZDF6CjRRa0hsL29hNEJMV3IrdU51bHU3aThtY0RpZ214OXVUeE9xN0x6MC84K1ZHV1BTUG1YdmxsNkdhODNuNTYvL1IKa3NVMnIwR0VCUnF6NVdrNXpDR3NFQ3pUTEJYWE9sdmh2T2w1MnJZSFhGTWd2TFJxOEN3NDBsQU0yRVVDZ1lFQQptUUd0RDBOSi9vaFNzL3ZhY1RCLzBzVFNQbE1sWU5ueFJPV2NjZldVZ1htVXNrU3ljSEZBdW43VW5KS1B0c3RCCm5LYjFuTlZ5QlFKQS9wSjhSSktRRTFnd1N1N1dJQ0dHNi9zUkNwdk5zL3RSS1M1bUNpMmUwSHRodkNLejYybWoKS042aGY2S0RUdGpZcDBSS0c1WGhtQzkvRW1qTEtrV2ZjOEl1S0s0T3NaMENnWUE5OVE4UGJkY0ZVdVNDNmpRYgpEMjF4VkdKYlZoZmV5QTBwRXBOdWx3Y0RCcUkvalI2V01aVmZ1dW9BY0hGQzBFamN6UzB6cnJtM1Y2TG5OMk1uCkhJL1Z5bHJzU2txNXhCOW5qLy9vbzdIdWRxdks4SW13c0xXYUk0YXdNeG1VM0tGY2VOeHpxY2xDdVZvaGh0OE4KeHlhNmZtUXNBVUJ1QjA0aURLaG03R2xaZFE9PQotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tCg==
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: nginx-ingress
+data:
+  main-snippets: |
+    load_module modules/ngx_http_app_protect_module.so;
+  server-snippets: |
+    app_protect_enable on;
+    app_protect_security_log_enable on;
+    app_protect_security_log "/etc/nginx/log-default.json" syslog:server=127.0.0.1:514;
+    app_protect_policy_file "/etc/nginx/waf/waf-policy.json";
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-waf
+  namespace: nginx-ingress
+data:
+  waf-policy.json: |
+    {
+    "name": "nginx-policy",
+    "template": { "name": "POLICY_TEMPLATE_NGINX_BASE" },
+    "applicationLanguage": "utf-8",
+    "enforcementMode": "blocking"
+    }
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nginx-ingress-serviceaccount
+  namespace: nginx-ingress
+  labels:
+    app.kubernetes.io/name: nginx-app-protect
+    app.kubernetes.io/part-of: nginx-app-protect
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: nginx-ingress-clusterrole
+  labels:
+    app.kubernetes.io/name: nginx-app-protect
+    app.kubernetes.io/part-of: nginx-app-protect
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - endpoints
+      - nodes
+      - pods
+      - secrets
+    verbs:
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - "extensions"
+      - "networking.k8s.io"
+      - "k8s.nginx.org"
+    resources:
+      - ingresses
+      - virtualservers
+      - virtualserverroutes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - "extensions"
+      - "networking.k8s.io"
+    resources:
+      - ingresses/status
+    verbs:
+      - update
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: nginx-ingress-role
+  namespace: nginx-ingress
+  labels:
+    app.kubernetes.io/name: nginx-app-protect
+    app.kubernetes.io/part-of: nginx-app-protect
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - pods
+      - secrets
+      - namespaces
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - update
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - get
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: nginx-ingress-role-nisa-binding
+  namespace: nginx-ingress
+  labels:
+    app.kubernetes.io/name: nginx-app-protect
+    app.kubernetes.io/part-of: nginx-app-protect
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: nginx-ingress-role
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress-serviceaccount
+    namespace: nginx-ingress
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: nginx-ingress-clusterrole-nisa-binding
+  labels:
+    app.kubernetes.io/name: nginx-app-protect
+    app.kubernetes.io/part-of: nginx-app-protect
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nginx-ingress-clusterrole
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress-serviceaccount
+    namespace: nginx-ingress
+
+---
+
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: virtualservers.k8s.nginx.org
+spec:
+  group: k8s.nginx.org
+  versions:
+  - name: v1
+    served: true
+    storage: true
+  scope: Namespaced
+  names:
+    plural: virtualservers
+    singular: virtualserver
+    kind: VirtualServer
+    shortNames:
+    - vs
+---
+
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: virtualserverroutes.k8s.nginx.org
+spec:
+  group: k8s.nginx.org
+  versions:
+  - name: v1
+    served: true
+    storage: true
+  scope: Namespaced
+  names:
+    plural: virtualserverroutes
+    singular: virtualserverroute
+    kind: VirtualServerRoute
+    shortNames:
+    - vsr

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: juiceshop
+  namespace: staging
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: juiceshop
+  template:
+    metadata:
+      labels:
+        app: juiceshop
+    spec:
+      containers:
+      - env:
+        - name: service_name
+          value: juiceshop
+        image: bkimminich/juice-shop:v9.3.1
+        imagePullPolicy: IfNotPresent
+        name: juiceshop
+        volumeMounts:
+        - name: config-volume
+          mountPath: /juice-shop/config/default.yml
+          subPath: default.yml
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+      volumes:
+      - name: config-volume
+        configMap:
+          name: juiceshop-config
+
