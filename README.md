@@ -8,9 +8,11 @@ This repo provides an implementation of an Ingress controller for NGINX and NGIN
 **Note**: this project is different from the NGINX Ingress controller in [kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx) repo. See [this doc](docs/nginx-ingress-controllers.md) to find out about the key differences.
 
 
-## NGINX Ingress Controller with App Protect WAF module
+## NGINX+ Ingress Controller with App Protect WAF module
 
 NGINX Ingress controller works with both NGINX and NGINX Plus and supports the standard Ingress features - content-based routing and TLS/SSL termination.
+
+**App Protect WAF module currenly only supports NGINX Plus**
 
 Additionally, several NGINX and NGINX Plus features are available as extensions to the Ingress resource via annotations and the ConfigMap resource. In addition to HTTP, NGINX Ingress controller supports load balancing Websocket, gRPC, TCP and UDP applications. See [ConfigMap and Annotations doc](docs/configmap-and-annotations.md) to learn more about the supported features and customization options.
 
@@ -18,7 +20,7 @@ As an alternative to the Ingress, NGINX Ingress controller supports the VirtualS
 
 Read [this doc](docs/nginx-plus.md) to learn more about NGINX Ingress controller with NGINX Plus.
 
-NGINX App Protect module has been added to provide an industry-leading WAF service for k8s workloads fronted by NGINX. See below for instructions on how to build NGINX+ with App Protect module
+NGINX Plus App Protect module has been added to provide an industry-leading WAF service for k8s workloads fronted by NGINX. See below for instructions on how to build NGINX+ with App Protect module
 
 ## Getting Started
 
