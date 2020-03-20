@@ -1,10 +1,13 @@
 FROM centos:7.4.1708
-ENV NGINX_VERSION="1.20.0 (nginx-plus-r20)"
 
-COPY app-protect.repo /etc/yum.repos.d/
-RUN yum install -y epel-release --nogpgcheck
-RUN yum install -y app-protect-88a9be14
+ARG RELEASE
+COPY installAppProtect.sh app-protect-${RELEASE}.zip /root/
+
+RUN  cd /root && ls -al /root/ && chmod +x /root/installAppProtect.sh  \
+ && /root/installAppProtect.sh app-protect-${RELEASE}.zip
+RUN yum localinstall -y  /root/r${RELEASE}/app-protect-attack-signatures-2020.03.03-1.el7.centos.x86_64.rpm
 RUN yum install -y sudo
+
 
 # Forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \

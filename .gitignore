@@ -45,3 +45,6 @@ default.pem
 
 # IntelliJ IDEA
 .idea
+
+# Zipped archive
+*.zip
